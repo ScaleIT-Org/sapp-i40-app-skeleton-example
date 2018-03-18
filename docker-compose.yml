@@ -1,3 +1,11 @@
 version: '2'
 
 services:
+ frontend:
+    build: ./Domain Software/IonicFrontend
+    ports: 
+     - "8100:80"
+ sidecarregistration:
+    build: ./Platform Sidecars/sidecar-registration/
+    env_file:
+      - ./Platform Sidecars/sidecar-registration/config.env

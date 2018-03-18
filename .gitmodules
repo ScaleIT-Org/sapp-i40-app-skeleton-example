@@ -1,0 +1,6 @@
+[submodule "Domain Software/IonicFrontend"]
+	path = Domain Software/IonicFrontend
+	url = https://github.com/ScaleIT-Org/ionic-app-skeleton.git
+[submodule "Platform Sidecars/sidecar-registration"]
+	path = Platform Sidecars/sidecar-registration
+	url = https://github.com/ScaleIT-Org/spsc-app-registration.git

@@ -1,4 +1,4 @@
-# ScaleIT App Meta Skeleton 
+# ScaleIT App Meta Skeleton Example
 
 Technology Stack Agnostic Industry 4.0 Ready App Skeleton.
 
@@ -7,31 +7,58 @@ Apps that follow this template are considered "Industrie 4.0 Ready" and can be s
 More information on app readiness can be found here:
 http://scaleit-platform-documentation.readthedocs.io/en/latest/app_readiness.html
 
-## Usage
 
-    git clone https://github.com/ScaleIT-Org/sapp-i40-app-skeleton.git My_New_ScaleiT_App
-    
-### With Git Submodule Composition
+This is an example repo on how to use the ScaleIT App Meta Skeleton with ionic-frontend and app-registration-sidecar.
 
-Add Node.js Domain Software:
-    
-    cd My_New_ScaleiT_App
-    git submodule add https://github.com/ScaleIT-Org/nodejs-app-skeleton.git "Domain Software/MyNodejsApp"
+## HowTo:
 
-Add a platform sidecar:
+#### 1) Clone Main App Skeleton
 
-### File Based Composition/Copying
+- Clone the main ScaleIT App Meta skeleton
 
-    mkdir MyNodejsApp
-    git clone https://github.com/ScaleIT-Org/nodejs-app-skeleton.git MyNodejsApp
-    
-    # move or copy the Node.js skeleton to the Industry 4.0 Ready App Skeleton
-    mv MyNodejsApp "My_New_ScaleiT_App/Domain Software"
+      git clone https://github.com/ScaleIT-Org/sapp-i40-app-skeleton.git My_New_ScaleiT_App
 
-    # optionally but recommended, remove the git version control from the Node.js skeleton
-    cd "My_New_ScaleiT_App/Domain Software/MyNodejsApp"
-    rm -rf .git
+#### 2) Add your domain software
 
-## Additional Information 
+- Use git submodules to add a domain software (ionic frontend)
 
-The `.gitkeep` files are just placeholders and can be deleted. This is due to the fact that git only checks in folders with files inside them.
+      cd sapp-i40-app-skeleton
+      git submodule add https://github.com/ScaleIT-Org/ionic-app-skeleton.git "Domain Software/IonicFrontend"
+
+- Add service to docker-compose.yml.
+  Your docker-compose.yml should now look like this:
+
+      version: '2'
+      services:
+        ionicfrontend:
+        build: ./Domain Software/IonicFrontend
+        ports:
+        - "8100:80"    
+
+#### 3) Add Platform Sidecar
+
+- Add a platform sidecar (app-registration-sidecar):
+    hint: to use the app-registration-sidecar you need a running etcd-store.
+    Refer to this repo: https://github.com/ScaleIT-Org/spe-app-registry-etcd
+
+      git submodule add https://github.com/ScaleIT-Org/spsc-app-registration.git "Platform Sidecars/sidecar-registration"  
+
+- Add service to main docker-compose.yml.
+
+      sidecarregistration:
+        build: ./Platform Sidecars/sidecar-registration/
+        env_file:
+          - ./Platform Sidecars/sidecar-registration/config.env
+
+- Configure environment variables to specify app details for the registration-service
+
+      Modify the file config.env in ./Platform Sidecars/sidecar-registration/
+
+#### 4) Build and Run
+
+        docker-compose build
+        docker-compose up
+
+#### 5) Results
+
+You should now have a running application with ionic frontend on localhost:8100 which is registrated on the specified etcd-store. 
